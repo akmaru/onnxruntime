@@ -557,6 +557,10 @@ inline void CustomOpDomain::Add(const OrtCustomOp* op) {
   ThrowOnError(GetApi().CustomOpDomain_Add(p_, op));
 }
 
+inline void CustomOpDomain::RegisterOpSchema() const {
+  ThrowOnError(GetApi().CustomOpDomain_RegisterOpSchema(p_));
+}
+
 inline RunOptions::RunOptions() {
   ThrowOnError(GetApi().CreateRunOptions(&p_));
 }

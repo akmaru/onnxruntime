@@ -4658,6 +4658,21 @@ struct OrtApi {
                   _In_reads_(num_external_initializer_files) char* const* external_initializer_file_buffer_array,
                   _In_reads_(num_external_initializer_files) const size_t* external_initializer_file_lengths,
                   size_t num_external_initializer_files);
+
+  /// \name OrtCustomOpDomain
+  /// @{
+
+  /** \brief Register OpSchema of the custom ops in a custom op domain.
+   *
+   * \param[in] custom_op_domain
+   *
+   * \snippet{doc} snippets.dox OrtStatus Return Value
+   *
+   * \since Version 1.19.
+   */
+  ORT_API2_STATUS(CustomOpDomain_RegisterOpSchema, _In_ const OrtCustomOpDomain* custom_op_domain);
+
+  /// @}
 };
 
 /*

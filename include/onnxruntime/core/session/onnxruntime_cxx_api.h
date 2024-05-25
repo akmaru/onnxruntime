@@ -734,6 +734,8 @@ struct CustomOpDomain : detail::Base<OrtCustomOpDomain> {
 
   // This does not take ownership of the op, simply registers it.
   void Add(const OrtCustomOp* op);  ///< Wraps CustomOpDomain_Add
+
+  void RegisterOpSchema() const;
 };
 
 /** \brief RunOptions

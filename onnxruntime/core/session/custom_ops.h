@@ -11,6 +11,7 @@ struct OrtCustomOpDomain;
 namespace onnxruntime {
 class CustomRegistry;
 
+common::Status RegisterOpSchema(const OrtCustomOpDomain* op_domain);
 common::Status CreateCustomRegistry(gsl::span<OrtCustomOpDomain* const> op_domains,
                                     std::shared_ptr<CustomRegistry>& output);
 

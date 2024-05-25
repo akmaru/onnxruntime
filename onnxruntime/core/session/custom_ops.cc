@@ -1202,6 +1202,21 @@ static void InferOutputTypes(const ONNX_NAMESPACE::OpSchema& schema, gsl::span<c
 
 #endif
 
+common::Status RegisterOpSchema(const OrtCustomOpDomain* op_domain) {
+  auto& domain_instance = ONNX_NAMESPACE::OpSchemaRegistry::DomainToVersionRange::Instance();
+  const auto& domain_to_version_map = domain_instance.Map();
+
+  if (domain_to_version_map.find(op_domain->domain_) == domain_to_version_map.end()) {
+    domain_instance.AddDomainToVersion(op_domain->domain_, 1, 1000);
+  }
+  for (const auto& op : op_domain->custom_ops_) {
+    auto schema = CreateSchema(op_domain->domain_, {op});
+    ONNX_NAMESPACE::RegisterSchema(schema, ORT_API_VERSION);
+  }
+
+  return Status::OK();
+}
+
 common::Status CreateCustomRegistry(gsl::span<OrtCustomOpDomain* const> op_domains,
                                     std::shared_ptr<CustomRegistry>& output) {
   output = std::make_shared<CustomRegistry>();

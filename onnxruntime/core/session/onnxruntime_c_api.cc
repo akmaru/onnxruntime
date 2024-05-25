@@ -3,6 +3,7 @@
 
 #include "core/session/onnxruntime_c_api.h"
 #include "core/session/allocator_adapters.h"
+#include "core/session/custom_ops.h"
 #include "core/session/inference_session_utils.h"
 #include "core/session/IOBinding.h"
 #include "core/framework/allocator.h"
@@ -591,6 +592,13 @@ ORT_API(void, OrtApis::ReleaseCustomOpDomain, _Frees_ptr_opt_ OrtCustomOpDomain*
 ORT_API_STATUS_IMPL(OrtApis::CustomOpDomain_Add, _Inout_ OrtCustomOpDomain* custom_op_domain, _In_ const OrtCustomOp* op) {
   API_IMPL_BEGIN
   custom_op_domain->custom_ops_.emplace_back(op);
+  return nullptr;
+  API_IMPL_END
+}
+
+ORT_API_STATUS_IMPL(OrtApis::CustomOpDomain_RegisterOpSchema, _In_ const OrtCustomOpDomain* custom_op_domain) {
+  API_IMPL_BEGIN
+  RegisterOpSchema(custom_op_domain);
   return nullptr;
   API_IMPL_END
 }
@@ -2730,7 +2738,8 @@ static constexpr OrtApi ort_api_1_to_19 = {
     &OrtApis::KernelInfoGetAllocator,
     &OrtApis::AddExternalInitializersFromFilesInMemory,
     // End of Version 18 - DO NOT MODIFY ABOVE (see above text for more information)
-};
+
+    &OrtApis::CustomOpDomain_RegisterOpSchema};
 
 // OrtApiBase can never change as there is no way to know what version of OrtApiBase is returned by OrtGetApiBase.
 static_assert(sizeof(OrtApiBase) == sizeof(void*) * 2, "New methods can't be added to OrtApiBase as it is not versioned");
